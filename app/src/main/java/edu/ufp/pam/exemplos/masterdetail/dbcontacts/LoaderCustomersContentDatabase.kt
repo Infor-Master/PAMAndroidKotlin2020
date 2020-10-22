@@ -86,10 +86,10 @@ class LoaderCustomersContentDatabase {
             val allCustomers = customerDao.loadAllCustomers()
             Log.e(
                 this.javaClass.simpleName,
-                "testeInsertCustomersAndListInserted(): allCustomers.size = ${allCustomers.size}"
+                "testeInsertCustomersAndListInserted(): allCustomers.size = ${allCustomers.value?.size}"
             )
             //Populate CUSTOMER_ITEMS and CUSTOMER_ITEM_MAP with all Customers
-            for (c: Customer in allCustomers) {
+            for (c: Customer in allCustomers.value!!) {
                 addItem(createCostumerItem(c))
             }
         }
