@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 @Database(
     entities = [Customer::class],
     views = [],
-    version = 1
+    version = 2
 )
 abstract class CustomersDatabase : RoomDatabase() {
 
@@ -28,7 +29,6 @@ abstract class CustomersDatabase : RoomDatabase() {
 
     //Behaves like a static attribute
     companion object {
-
         @Volatile
         private var INSTANCE: CustomersDatabase? = null
 
@@ -44,64 +44,70 @@ abstract class CustomersDatabase : RoomDatabase() {
                 "Customers.db"
             )
                 .fallbackToDestructiveMigration()
+                //May use migration objets or each new schema
                 //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                 .build()
 
-        fun getCustomerDatabaseInstance(context: Context, scope: CoroutineScope): CustomersDatabase =
+        fun getCustomerDatabaseInstance(
+            context: Context,
+            scope: CoroutineScope
+        ): CustomersDatabase =
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: buildDatabase(context, scope).also { INSTANCE = it }
             }
 
+        /** Populate DB through the use of a RoomDatabase.Callback use in Room.databaseBuilder(). */
         private fun buildDatabase(context: Context, scope: CoroutineScope) =
             Room.databaseBuilder(
                 context.applicationContext,
                 CustomersDatabase::class.java,
                 "Customers.db"
             )
-                .addCallback(CustomersRoomDatabaseCallback(scope))
                 .fallbackToDestructiveMigration()
+                //Use migration objects for each new schema evolution
                 //.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                //Use RoomDatabase.Callback() to clear and repopulate DB instead of migrating
+                .addCallback(CustomersDatabaseCallback(scope))
                 .build()
     }
 
-    val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(
-                "CREATE TABLE `tasktypes` (`id` INTEGER, `tasktitle` TEXT, " +
-                        "PRIMARY KEY(`id`))"
-            )
-        }
-    }
+    /**
+     * The RoomDatabase.Callback() is called on DB databaseBuilder():
+     *  1. override onOpen(): clear and repopulate DB whenever app is started;
+     *  2. override the onCreate(): populate DB only the first time the app is launched.
+     */
+    private class CustomersDatabaseCallback(private val scope: CoroutineScope) :
+        RoomDatabase.Callback() {
 
-    val MIGRATION_2_3: Migration
-        get() = object : Migration(2, 3) {
-            override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL("ALTER TABLE tasktypes ADD COLUMN taskpriority INTEGER")
-            }
-        }
-
-    private class CustomersRoomDatabaseCallback(private val scope: CoroutineScope) : RoomDatabase.Callback() {
-
-        /* Populate the database just the first time app is launched
-        override fun onCreate(db: SupportSQLiteDatabase) {
-            super.onOpen(db)
-            //...
-        }*/
-
-        /** Delete all content and repopulate the database whenever the app is started */
+        /** Override onOpen() to clear and populate DB every time app is started. */
         override fun onOpen(db: SupportSQLiteDatabase) {
             super.onOpen(db)
+            // To keep DB data through app restarts comment coroutine exec:
             INSTANCE?.let { database ->
-                scope.launch {
-                    populateDatabase(database.customerDao())
+                scope.launch(Dispatchers.IO) {
+                    cleanAndPopulateCustomersDatabase(database.customerDao())
                 }
             }
         }
 
-        suspend fun populateDatabase(customerDao: CustomerDao) {
-            // Delete all content here.
-            customerDao.deleteAllcustomers()
+        /** Overrite onCreate() to populate DB only first time app is launched. */
+        override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            //To clear and repopulate DB every time app is started comment coroutine exec:
+            INSTANCE?.let { database ->
+                scope.launch(Dispatchers.IO) {
+                    //cleanAndPopulateCustomersDatabase(database.customerDao())
+                }
+            }
+        }
 
+        /**
+         * Remove all customers from DB and populate with some customers.
+         */
+        fun cleanAndPopulateCustomersDatabase(customerDao: CustomerDao) {
+            // Clear all customers from DB
+            customerDao.deleteAllcustomers()
+            //Populate with some Patinhas customers
             for (i in 1..LoaderCustomersContentDatabase.COUNT) {
                 //CREATE
                 val customer: Customer =
@@ -122,4 +128,20 @@ abstract class CustomersDatabase : RoomDatabase() {
             }
         }
     }
+
+    val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                "CREATE TABLE `tasktypes` (`id` INTEGER, `tasktitle` TEXT, " +
+                        "PRIMARY KEY(`id`))"
+            )
+        }
+    }
+
+    val MIGRATION_2_3: Migration
+        get() = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE tasktypes ADD COLUMN taskpriority INTEGER")
+            }
+        }
 }

@@ -1,5 +1,6 @@
 package edu.ufp.pam.examplos.masterdetail.dbcontacts
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.reactivex.Completable
 
@@ -33,7 +34,7 @@ interface CustomerDao {
      * @return all customers from the table.
      */
     @Query("SELECT * FROM customers")
-    fun loadAllCustomers(): List<Customer>
+    fun loadAllCustomers(): LiveData<List<Customer>>
 
     /**
      * Get a customer by id.
