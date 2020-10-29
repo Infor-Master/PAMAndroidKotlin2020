@@ -82,10 +82,10 @@ class MainFarruscoActivity : AppCompatActivity() {
             val queryStr = "/data.txt"
 
             //1. Use Volley async HttpRequest
-            //launchAsyncVolleyHttpRequest("$urlStr$queryStr")
+            launchAsyncVolleyHttpRequest("$urlStr$queryStr")
 
             //2. Use ViewModel to launch async HTTP call and receive response through observer LiveDate
-            launchViewModelAsyncHttpRequest(urlStr, queryStr)
+            //launchViewModelAsyncHttpRequest(urlStr, queryStr)
 
             //3. Use WorkManager to enqueue and asyn execute a DownloadWorker
             //launchDownloadWorkerAsyncHttpRequest(urlStr, queryStr)
@@ -167,7 +167,8 @@ class MainFarruscoActivity : AppCompatActivity() {
 
         //Run async call:
         //GetHttpTask(this.textViewReply).execute(urlStr, queryStr)
-        launchDownloadWorkerAsyncHttpRequest(urlStr, queryStr)
+        //launchDownloadWorkerAsyncHttpRequest(urlStr, queryStr)
+        launchAsyncVolleyHttpRequest("$urlStr$queryStr")
     }
 
     /**
