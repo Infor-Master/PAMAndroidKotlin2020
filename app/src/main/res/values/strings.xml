@@ -30,4 +30,5 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_main_download_intent_service">MainDownloadIntentServiceActivity
     </string>
+    <string name="title_activity_main_messenger_service">MainMessengerServiceActivity</string>
 </resources>

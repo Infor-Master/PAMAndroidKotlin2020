@@ -15,7 +15,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="edu.ufp.pam.someservices.MainDownloadIntentServiceActivity"
+            android:name="edu.ufp.pam.someservices.messengerservice.MainMessengerServiceActivity"
+            android:label="@string/title_activity_main_messenger_service"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="edu.ufp.pam.someservices.messengerservice.MessengerService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name="edu.ufp.pam.someservices.downloadintentservice.MainDownloadIntentServiceActivity"
             android:label="@string/title_activity_main_download_intent_service"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,7 +42,7 @@
         </activity>
 
         <service
-            android:name="edu.ufp.pam.someservices.DownloadIntentService"
+            android:name="edu.ufp.pam.someservices.downloadintentservice.DownloadIntentService"
             android:exported="false" />
 
         <activity

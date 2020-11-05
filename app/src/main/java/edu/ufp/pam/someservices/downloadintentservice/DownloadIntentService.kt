@@ -1,4 +1,4 @@
-package edu.ufp.pam.someservices
+package edu.ufp.pam.someservices.downloadintentservice
 
 import android.app.IntentService
 import android.content.Intent
