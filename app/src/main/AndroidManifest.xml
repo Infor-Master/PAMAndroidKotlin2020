@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.ufp.pam.exemplos" >
+    package="edu.ufp.pam.exemplos">
 
-    <uses-permission
-        android:name="android.permission.INTERNET"/>
-    <uses-permission
-        android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -16,11 +13,26 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="edu.ufp.pam.someservices.MainDownloadIntentServiceActivity"
+            android:label="@string/title_activity_main_download_intent_service"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="edu.ufp.pam.someservices.DownloadIntentService"
+            android:exported="false" />
+
         <activity
             android:name="edu.ufp.pam.farrusco.MainFarruscoActivity"
             android:label="@string/title_activity_main_farrusco"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".masterdetail.NewCustomerActivity" />
-        <activity android:name=".masterdetail.MainCustomerCreateDatabaseActivity" >
+        <activity android:name=".masterdetail.MainCustomerCreateDatabaseActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,7 +50,7 @@
         <activity
             android:name=".masterdetail.CustomerItemListActivity"
             android:label="@string/title_customeritem_list"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -49,7 +61,7 @@
             android:name=".masterdetail.CustomerItemDetailActivity"
             android:label="@string/title_customeritem_detail"
             android:parentActivityName=".masterdetail.CustomerItemListActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="edu.ufp.pam.exemplos.masterdetail.CustomerItemListActivity" />
@@ -57,14 +69,14 @@
         <activity
             android:name=".navdraw.MainNavDrawActivity"
             android:label="@string/title_activity_main_nav_draw"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".hit.MainHitActivity" >
+        <activity android:name=".hit.MainHitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -73,7 +85,7 @@
         </activity>
         <activity
             android:name=".hello.MainHelloActivity"
-            android:label="@string/title_activity_main_hello" >
+            android:label="@string/title_activity_main_hello">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
