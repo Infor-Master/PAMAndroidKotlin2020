@@ -31,4 +31,6 @@
     <string name="title_activity_main_download_intent_service">MainDownloadIntentServiceActivity
     </string>
     <string name="title_activity_main_messenger_service">MainMessengerServiceActivity</string>
+    <string name="title_activity_google_maps">Map</string>
+    <string name="hello_world_on_android">Hello World on Android</string>
 </resources>

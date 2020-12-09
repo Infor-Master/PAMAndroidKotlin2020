@@ -120,9 +120,9 @@ class MainMessengerServiceActivity : AppCompatActivity() {
         try {
             //Prepare a message to be sent to service
             //val msg: Message = Message.obtain(null, MSG_TO_SERVICE_SEND_HELLO, 0, 0)
-            val msg: Message = Message.obtain(null, MSG_TO_SERVICE_SAY_HELLO, "Hello World from client!")
+            //val msg: Message = Message.obtain(null, MSG_TO_SERVICE_SAY_HELLO, "Hello World from client!")
             val url = "http://homepage.ufp.pt/rmoreira/LP2/data.txt"
-            //val msg: Message = Message.obtain(null, MSG_TO_SERVICE_DOWNLOAD_FILE, url)
+            val msg: Message = Message.obtain(null, MSG_TO_SERVICE_DOWNLOAD_FILE, url)
 
             //Send also the client Messenger for service to callback
             msg.replyTo = clientMessenger

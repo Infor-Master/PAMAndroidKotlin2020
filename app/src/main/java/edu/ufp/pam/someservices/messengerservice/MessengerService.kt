@@ -7,7 +7,11 @@ import android.os.IBinder
 import android.os.Message
 import android.os.Messenger
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
+import com.android.volley.toolbox.StringRequest
+import edu.ufp.pam.exemplos.R
+import edu.ufp.pam.farrusco.SingletonVolleyRequestQueue
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
@@ -69,6 +73,7 @@ class MessengerService : Service() {
                     Log.e(this.javaClass.simpleName,"handleMessage(): going to download file on service side!")
                     val url : String = msg.obj.toString()
                     val responseBody = runHttpGetCallWithOkHttp(url)
+                    //val responseBody = launchAsyncVolleyHttpRequest(url)
                     val msgToClient: Message = Message.obtain(null, MSG_TO_CLIENT_REPLY_FILE_CONTENT, responseBody)
                     msg.replyTo.send(msgToClient)
                 }
